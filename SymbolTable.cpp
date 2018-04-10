@@ -36,6 +36,6 @@ private:
 
 
 int main(){
-    SymbolInfo
+
     return 0;
 }
