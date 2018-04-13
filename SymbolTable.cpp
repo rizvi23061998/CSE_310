@@ -48,13 +48,22 @@ public:
     //variables
     ScopeTable * parentScope;
 
-    ScopeTable(int x = 10){
+    ScopeTable(int x = 10 , int id){
         n = x;
+        this->id = id;
         scopeTable = new SymbolInfo*[n];
         for(int i=0; i<n; i++){
             scopeTable[i] = NULL;
         }
 
+    }
+
+    void setId(int id){
+        this -> id = id;
+    }
+
+    int getId(){
+        return id;
     }
 
     bool insert(string name,string type){
@@ -167,9 +176,57 @@ public:
     }
 
     void enterScope(){
-        ScopeTable newScope(bucketSize);
+        curId++;
+        ScopeTable * newScope = new ScopeTable(bucketSize,curId);
+        newScope -> parentScope = currentScope;
+        currentScope = newScope;
     }
 
+    void exitScope(){
+        ScopeTable *prev = currentScope;
+        currentScope = currentScope->parentScope;
+        curId--;
+        delete prev;
+
+    }
+
+    bool insert(string name, string type){
+        if(currentScope->insert(name,type))
+            return true;
+        else return false;
+    }
+
+    bool remove(string name){
+        if(currentScope->deleteItem(name))
+            return true;
+        else return false;
+    }
+    SymbolInfo * lookup(string name){
+        ScopeTable * cur = currentScope;
+        SymbolInfo * result = NULL;
+
+        while(cur!=NULL){
+            result = cur->lookup(name);
+            if(result != NULL)
+                return res;
+            else cur = cur->parentScope;
+        }
+        return res;
+
+    }
+
+    void printCurrentScope(){
+        currentScope->print();
+    }
+    void printAll(){
+        ScopeTable * cur = currentScope;
+
+        while (cur!=NULL){
+            cur->print();
+            cur = cur->parentScope;
+        }
+
+    }
     ~SymbolTable(){
         ScopeTable *prev = NULL;
         while(currentScope != NULL){
