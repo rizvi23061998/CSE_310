@@ -1,0 +1,7 @@
+if else
+1234
+etc
+"if"|"else"|"for"|"while"|"do"|"int"|"float"|"void"|"switch"|"default"|"break"|"char"|"double"|"continue"|"return"|"case"
+for while
+
+"if"|"else"|"for"|"while"|"do"|"int"|"float"|"void"|"switch"|"default"|"break"|"char"|"double"|"continue"|"return"|"case"
