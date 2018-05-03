@@ -1,36 +1,20 @@
 <IF> token found in line no:1
-<ELSE> token found in line no:1
-<IF> token found in line no:4
-<ELSE> token found in line no:4
-<FOR> token found in line no:4
-<WHILE> token found in line no:4
-<DO> token found in line no:4
-<INT> token found in line no:4
-<FLOAT> token found in line no:4
-<VOID> token found in line no:4
-<SWITCH> token found in line no:4
-<DEFAULT> token found in line no:4
-<BREAK> token found in line no:4
-<CHAR> token found in line no:4
-<DOUBLE> token found in line no:4
-<CONTINUE> token found in line no:4
-<RETURN> token found in line no:4
-<CASE> token found in line no:4
-<FOR> token found in line no:5
-<WHILE> token found in line no:5
-<IF> token found in line no:7
-<ELSE> token found in line no:7
-<FOR> token found in line no:7
-<WHILE> token found in line no:7
-<DO> token found in line no:7
-<INT> token found in line no:7
-<FLOAT> token found in line no:7
-<VOID> token found in line no:7
-<SWITCH> token found in line no:7
-<DEFAULT> token found in line no:7
-<BREAK> token found in line no:7
-<CHAR> token found in line no:7
-<DOUBLE> token found in line no:7
-<CONTINUE> token found in line no:7
-<RETURN> token found in line no:7
-<CASE> token found in line no:7
+
+Line No:2,Token <CONST_INT> Lexeme 1234 found
+
+Line No:4,Token <CONST_CHAR> Lexeme 
+ found
+
+Line No:5,Token <CONST_CHAR> Lexeme  found
+
+Line No:6,Token <CONST_CHAR> Lexeme  found
+
+Line No:7,Token <CONST_CHAR> Lexeme 	 found
+
+Line No:8,Token <CONST_CHAR> Lexeme  found
+
+Line No:9,Token <CONST_CHAR> Lexeme  found
+
+Line No:10,Token <CONST_CHAR> Lexeme ' found
+
+Line No:11,Token <CONST_CHAR> Lexeme \ found

@@ -262,6 +262,7 @@ public:
             currentScope = currentScope->parentScope;
             delete prev;
         }
+
     }
 
 };
