@@ -1,20 +1,21 @@
 <IF> token found in line no:1
+<ELSE> token found in line no:1
 
 Line No:2,Token <CONST_INT> Lexeme 1234 found
 
-Line No:4,Token <CONST_CHAR> Lexeme 
+Line No:3,Token <COMMENT> Lexeme *Hello 
+\n *banglad
+esh>**/
+
  found
 
-Line No:5,Token <CONST_CHAR> Lexeme  found
+Line No:4,Token <COMMENT> Lexeme //Hello nag\
+bangladesh
+ found
 
-Line No:6,Token <CONST_CHAR> Lexeme  found
+Line No:4,Token <COMMENT> Lexeme //hello
+ found
 
-Line No:7,Token <CONST_CHAR> Lexeme 	 found
+Line No:4,Token <ID> Lexeme bang found
 
-Line No:8,Token <CONST_CHAR> Lexeme  found
-
-Line No:9,Token <CONST_CHAR> Lexeme  found
-
-Line No:10,Token <CONST_CHAR> Lexeme ' found
-
-Line No:11,Token <CONST_CHAR> Lexeme \ found
+Line No:5,Token <ID> Lexeme jek found
