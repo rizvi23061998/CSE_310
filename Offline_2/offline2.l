@@ -1,5 +1,6 @@
 %option noyywrap
 %x COMMENT
+%x CHAR_ERR
 
 %{
 	#include <stdio.h>
@@ -8,6 +9,8 @@
 	#include "SymbolTable.h"
 	
 	int linecount = 1;
+	int comLine ;
+	int errcnt = 0;
 	char comment[1000];
 	FILE *logout;
 	FILE *tokenout;
@@ -66,8 +69,8 @@
 	char * stringProcessor(char *s){
 		int l = strlen(s);
 		char *t = (char *)malloc(sizeof(char)*l);
-
-		for(int i = 0,j=0;i<l;i++,j++){
+		int i,j;
+		for(i = 1,j=0;i<l;i++,j++){
 
 		    if(s[i] == '\\'){
 
@@ -84,7 +87,8 @@
 		        else if(s[i+1] == 'f'){t[j] = '\f';}
 		        else if(s[i+1] == '0'){t[j] = '\0';}
 		        else if(s[i+1] == '"'){t[j] = '"';}
-		        else if(s[i+1] == '\n'){linecount++;}
+		        else if(s[i+1] == '\n'){linecount++;j--;}
+				else if(s[i+1]=='"'){t[j] = '"';}
 		        else{}
 		        i++;
 		    }
@@ -93,6 +97,7 @@
 		    }
 		    //printf("%c",t[j]);
 		}
+		t[j-1]='\0';
 		return t;
 
 	}
@@ -106,43 +111,46 @@ WHITESPACE [ \t\f\r\v]+
 NEWLINE \n
 LETTER [A-Za-z]
 DIGIT [0-9]
-KEYWORD "if"|"n"|"for"|"while"|"do"|"int"|"float"|"void"|"switch"|"default"|"break"|"char"|"double"|"continue"|"return"|"case"|"else"
+KEYWORD "if"|"for"|"while"|"do"|"int"|"float"|"void"|"switch"|"default"|"break"|"char"|"double"|"continue"|"return"|"case"|"else"
 CHAR_LITERAL "'.'"|"'\\\\'"|"'\\a'"|"'\\f'"|"'\\r'"|"'\\b'"|"'\\v'"|"'\\0'"|"'\\''"|"'\\n'"|"'\\t'" 
+CHAR_LIT [\']([^'\\]|(\\[aftrbvn0\'\\]))[\']
 BITOP "&"|"|"|">>"|"<<"|"^"
 ID [A-Za-z_][A-Za-z_0-9]*
-STRING [\"]([^"\n]|[\\.]|(\\\n))*[\"]
-SINGLE_COMMENT ("//")[^\n]*((\\\n)[^\n]*)*(\n)
+STRING [\"]([^"\n]|\\.|(\\\n))*[\"]
+SINGLE_COMMENT ("//")[^\n]*((\\\n)[^\n]*)*[\n<<EOF>>]
+UNTERM_STRING [\"]([^"\n]|[\\.]|(\\\n))*[\n<<EOF>>]
+EXP_ERR ({DIGIT}*\.?{DIGIT}+?|{DIGIT}+\.?)(E{DIGIT}*(\.)+{DIGIT}+)
 %%
 
 {NEWLINE}    {
 				linecount++;
 			 }
-WHITESPACE   {
+{WHITESPACE} {
 				//do nothing
 			 }
 
 {KEYWORD}    {
-				fprintf(logout,"<%s> token found in line no:%d\n",upString(yytext),linecount);
-				fprintf(tokenout,"<%s>",upString(yytext));
+				fprintf(logout,"\nLine no:%d,Token <%s> found\n",linecount,upString(yytext));
+				fprintf(tokenout,"<%s> ",upString(yytext));
 
 			 }
 {DIGIT}+     {
 				fprintf(logout,"\nLine No:%d,Token <CONST_INT> Lexeme %s found\n",linecount,yytext);			
-				fprintf(tokenout,"<CONST_INT,%s>",yytext);	
+				fprintf(tokenout,"<CONST_INT, %s> ",yytext);	
 				st.insert(yytext,"CONST_INT");
 				st.printAll();		 
 			 }
 
 ({DIGIT}*\.?{DIGIT}+?|{DIGIT}+\.?)(E[-+]?{DIGIT}+)? {
 				fprintf(logout,"\nLine No:%d,Token <CONST_FLOAT> Lexeme %s found\n",linecount,yytext);			
-				fprintf(tokenout,"<CONST_FLOAT,%s>",yytext);	
+				fprintf(tokenout,"<CONST_FLOAT, %s> ",yytext);	
 				st.insert(yytext,"CONST_FLOAT");
 				st.printAll();
 			}
-{CHAR_LITERAL}  {
+{CHAR_LIT}  {
 					char str[2];
-				 	fprintf(logout,"\nLine No:%d,Token <CONST_CHAR> Lexeme %c found\n",linecount,trim(yytext));			
-					fprintf(tokenout,"<CONST_CHAR,%c>",trim(yytext));	
+				 	fprintf(logout,"\nLine No:%d,Token <CONST_CHAR> Lexeme %s found\n",linecount,yytext);			
+					fprintf(tokenout,"<CONST_CHAR, %c> ",trim(yytext));	
 					str[0] = trim(yytext);					
 					str[1] = '\0';
 					st.insert(str,"CONST_CHAR");
@@ -151,125 +159,99 @@ WHITESPACE   {
 			   }
 [-+]           {
 					fprintf(logout,"\nLine No:%d,Token <ADDOP> Lexeme %s found\n",linecount,yytext);			
-					fprintf(tokenout,"<ADDOP,%s>",yytext);
-					st.insert(yytext,"ADDOP");
-					st.printAll();
+					fprintf(tokenout,"<ADDOP, %s> ",yytext);
 				}
 "*"|"/"|"%"          {
 					fprintf(logout,"\nLine No:%d,Token <MULOP> Lexeme %s found\n",linecount,yytext);			
-					fprintf(tokenout,"<MULOP,%s>",yytext);
-					st.insert(yytext,"MULOP");
-					st.printAll();
+					fprintf(tokenout,"<MULOP, %s> ",yytext);
 
 				}
 "++"|"--"      {
 					fprintf(logout,"\nLine No:%d,Token <INCOP> Lexeme %s found\n",linecount,yytext);			
-					fprintf(tokenout,"<INCOP,%s>",yytext);
-					st.insert(yytext,"INCOP");
-					st.printAll();
+					fprintf(tokenout,"<INCOP, %s> ",yytext);
+
 				}
 
 "<"|"<="|">"|">="|"=="|"!=" {
 								fprintf(logout,"\nLine No:%d,Token <RELOP> Lexeme %s found\n",linecount,yytext);			
-								fprintf(tokenout,"<RELOP,%s>",yytext);
-								st.insert(yytext,"RELOP");
-								st.printAll();
+								fprintf(tokenout,"<RELOP, %s> ",yytext);
 
 							}
 "="               {
 						fprintf(logout,"\nLine No:%d,Token <ASSIGNOP> Lexeme %s found\n",linecount,yytext);			
-						fprintf(tokenout,"<ASSIGNOP,%s>",yytext);
-						st.insert(yytext,"ASSIGNOP");
-						st.printAll();
+						fprintf(tokenout,"<ASSIGNOP, %s> ",yytext);
 
 				   }   
 "&&"|"||"         {
 					fprintf(logout,"\nLine No:%d,Token <LOGICOP> Lexeme %s found\n",linecount,yytext);			
-					fprintf(tokenout,"<LOGICOP,%s>",yytext);
-					st.insert(yytext,"LOGICOP");
-					st.printAll();
+					fprintf(tokenout,"<LOGICOP, %s> ",yytext);
 				  }
 {BITOP}           {
 					fprintf(logout,"\nLine No:%d,Token <BITOP> Lexeme %s found\n",linecount,yytext);			
-					fprintf(tokenout,"<BITOP,%s>",yytext);
-					st.insert(yytext,"BITOP");
-					st.printAll();
+					fprintf(tokenout,"<BITOP, %s> ",yytext);
 			   	  }
 "!"				 {
 					fprintf(logout,"\nLine No:%d,Token <NOT> Lexeme %s found\n",linecount,yytext);			
-					fprintf(tokenout,"<NOT,%s>",yytext);
-					st.insert(yytext,"NOT");
-					st.printAll();
+					fprintf(tokenout,"<NOT, %s> ",yytext);
 				 
 				 }
 "("				{
 					fprintf(logout,"\nLine No:%d,Token <LPAREN> Lexeme %s found\n",linecount,yytext);			
-					fprintf(tokenout,"<LPAREN,%s>",yytext);
-					st.insert(yytext,"LPAREN");
-					st.printAll();
+					fprintf(tokenout,"<LPAREN, %s> ",yytext);
 				}
 ")"             {
 					fprintf(logout,"\nLine No:%d,Token <RPAREN> Lexeme %s found\n",linecount,yytext);			
-					fprintf(tokenout,"<RPAREN,%s>",yytext);
-					st.insert(yytext,"RPAREN");
-					st.printAll();
+					fprintf(tokenout,"<RPAREN, %s> ",yytext);
 				}
 "{"             {
 					fprintf(logout,"\nLine No:%d,Token <LCURL> Lexeme %s found\n",linecount,yytext);			
-					fprintf(tokenout,"<LCURL,%s>",yytext);
-					st.insert(yytext,"LCURL");
-					st.printAll();
+					fprintf(tokenout,"<LCURL, %s> ",yytext);
 				}
 "}"             {
 					fprintf(logout,"\nLine No:%d,Token <RCURL> Lexeme %s found\n",linecount,yytext);			
-					fprintf(tokenout,"<RCURL,%s>",yytext);
-					st.insert(yytext,"RCURL");
-					st.printAll();									
+					fprintf(tokenout,"<RCURL, %s> ",yytext);
 
 				}
 "["             {
 					fprintf(logout,"\nLine No:%d,Token <LTHIRD> Lexeme %s found\n",linecount,yytext);			
-					fprintf(tokenout,"<LTHIRD,%s>",yytext);
-					st.insert(yytext,"LTHIRD");
-					st.printAll();				
+					fprintf(tokenout,"<LTHIRD, %s> ",yytext);
+
 				}
 "]"             {
 					fprintf(logout,"\nLine No:%d,Token <RTHIRD> Lexeme %s found\n",linecount,yytext);			
-					fprintf(tokenout,"<RTHIRD,%s>",yytext);
-					st.insert(yytext,"RTHIRD");
-					st.printAll();	
+					fprintf(tokenout,"<RTHIRD, %s> ",yytext);
+
 				}
 ","             {
 					fprintf(logout,"\nLine No:%d,Token <COMMA> Lexeme %s found\n",linecount,yytext);			
-					fprintf(tokenout,"<COMMA,%s>",yytext);
-					st.insert(yytext,"COMMA");
-					st.printAll();	
+					fprintf(tokenout,"<COMMA, %s> ",yytext);
+
 
 				} 
 ";"             {
 					fprintf(logout,"\nLine No:%d,Token <SEMICOLON> Lexeme %s found\n",linecount,yytext);			
-					fprintf(tokenout,"<SEMICOLON,%s>",yytext);
-					st.insert(yytext,"SEMICOLON");
-					st.printAll();	
+					fprintf(tokenout,"<SEMICOLON, %s> ",yytext);
 
 				}
 {ID}			{
 					fprintf(logout,"\nLine No:%d,Token <ID> Lexeme %s found\n",linecount,yytext);			
-					fprintf(tokenout,"<ID,%s>",yytext);
+					fprintf(tokenout,"<ID, %s> ",yytext);
 					st.insert(yytext,"ID");
 					st.printAll();
 				}
 {STRING}        {
 					int tmp = linecount;
-					fprintf(logout,"\nLine No:%d,Token <STRING> Lexeme %s found\n",tmp,stringProcessor(yytext));			
-					fprintf(tokenout,"<STRING,%s>",stringProcessor(yytext));		
+					char *s = stringProcessor(yytext);
+					fprintf(logout,"\nLine No:%d,Token <STRING> Lexeme %s found\n",tmp,yytext);			
+					fprintf(tokenout,"<STRING, %s> ",s);		
 				}
 "/*"            {
+					comLine = linecount;
 					strcpy(comment,"");
 					BEGIN(COMMENT);
 				}
 <COMMENT>"*/"    {
-					fprintf(logout,"\nLine No:%d,Token <COMMENT> Lexeme %s found\n",linecount,comment);			
+					fprintf(logout,"\nLine No:%d,Token <COMMENT> Lexeme %s found\n",comLine,comment);			
 					BEGIN(INITIAL);	
 			     }
 
@@ -277,14 +259,66 @@ WHITESPACE   {
 <COMMENT>([^*]|\n)+|. {
 						//fprintf(logout,"\nLine No:%d,Token <COMMENT> Lexeme %s found\n",linecount,yytext);			
 						strcat(comment,yytext);
+						for(int i=0;i<strlen(yytext);i++){
+							if(yytext[i] == '\n')linecount++;
+						}
 					  }
-<COMMENT>("*")*         {
-					 	strcat(comment,yytext);
-					 }
+<COMMENT><<EOF>>      {
+						errcnt++;
+						fprintf(logout,"\n Error at Line %d: Unterminated comment %s\n",comLine,comment);
+						BEGIN(INITIAL);
+					  }
 
 {SINGLE_COMMENT}     {
 						fprintf(logout,"\nLine No:%d,Token <COMMENT> Lexeme %s found\n",linecount,yytext);
+						for(int i=0;i<strlen(yytext);i++){
+							if(yytext[i] == '\n')linecount++;
+						}
 					 }
+{DIGIT}*\.({DIGIT}*(\.)+{DIGIT}*)* 		{
+											errcnt++;
+											fprintf(logout,"\n Error at Line %d: Too many decimal points %s\n",linecount,yytext);
+									 	}
+{EXP_ERR}                               {
+											errcnt++;
+											fprintf(logout,"\n Error at Line %d: Ill formed number %s\n",linecount,yytext);
+										}
+{DIGIT}+[A-Za-z_]+[A-Za-z0-9]*    {
+									errcnt++;
+								  	fprintf(logout,"\n Error at line %d: Invalid prefix on ID or invalid suffix on Number %s\n",linecount,yytext);
+								  }
+
+\'..+\'               {
+					    errcnt++;
+						fprintf(logout,"\n Error at line %d: Multi character constant error %s\n",linecount,yytext);
+
+					   }
+(\'\\\')|(\'[^\']*[{WHITESPACE}\n]) {
+								errcnt++;
+								fprintf(logout,"\n Error at line %d: Unterminated character %s\n",linecount,yytext);
+								for(int i=0;i<strlen(yytext);i++){
+									if(yytext[i] == '\n')linecount++;
+								}	
+							  }
+
+\'\'                          {
+								 errcnt++;
+								 fprintf(logout,"\n Error at line %d: Empty character constant error %s\n",linecount,yytext);	
+							  }
+{UNTERM_STRING}               {
+								 errcnt++;
+								 fprintf(logout,"\n Error at line %d: Unterminated string %s\n",linecount,yytext);
+								 for(int i=0;i<strlen(yytext);i++){
+								 	if(yytext[i] == '\n')linecount++;
+								 }	
+								 
+							   }
+	    												
+.                              {
+								 errcnt++;
+								 fprintf(logout,"\n Error at line %d: Unrecognized character %s\n",linecount,yytext);	
+					   		   }									
+
 %%
 
 int main(int argc,char *argv[]){
@@ -298,6 +332,8 @@ int main(int argc,char *argv[]){
 	
 	yyin = input;
 	yylex();
+	fprintf(logout,"Total lines: %d\n",linecount-1);
+	fprintf(logout,"Total errors: %d\n",errcnt);
 	fclose(yyin);
 	fclose(tokenout);
 	fclose(logout);

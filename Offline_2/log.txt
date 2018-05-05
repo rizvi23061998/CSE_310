@@ -1,21 +1,188 @@
-<IF> token found in line no:1
-<ELSE> token found in line no:1
 
-Line No:2,Token <CONST_INT> Lexeme 1234 found
+Line no:1,Token <INT> found
 
-Line No:3,Token <COMMENT> Lexeme *Hello 
-\n *banglad
-esh>**/
+Line No:1,Token <ID> Lexeme main found
+<main,ID> inserted at ScopeTable #1 at (41,0)
 
+ScopeTable # 1:
+41 --->  <main,ID> 
+
+Line No:1,Token <LPAREN> Lexeme ( found
+
+Line No:1,Token <RPAREN> Lexeme ) found
+
+Line No:1,Token <LCURL> Lexeme { found
+
+Line no:2,Token <INT> found
+
+Line No:2,Token <ID> Lexeme a found
+<a,ID> inserted at ScopeTable #1 at (27,0)
+
+ScopeTable # 1:
+27 --->  <a,ID> 
+41 --->  <main,ID> 
+
+Line No:2,Token <COMMA> Lexeme , found
+
+Line No:2,Token <ID> Lexeme b found
+<b,ID> inserted at ScopeTable #1 at (28,0)
+
+ScopeTable # 1:
+27 --->  <a,ID> 
+28 --->  <b,ID> 
+41 --->  <main,ID> 
+
+Line No:2,Token <SEMICOLON> Lexeme ; found
+
+Line No:3,Token <ID> Lexeme a found
+
+ScopeTable # 1:
+27 --->  <a,ID> 
+28 --->  <b,ID> 
+41 --->  <main,ID> 
+
+Line No:3,Token <ASSIGNOP> Lexeme = found
+
+Line No:3,Token <ID> Lexeme a found
+
+ScopeTable # 1:
+27 --->  <a,ID> 
+28 --->  <b,ID> 
+41 --->  <main,ID> 
+
+Line No:3,Token <ADDOP> Lexeme + found
+
+Line No:3,Token <CONST_INT> Lexeme 1 found
+<1,CONST_INT> inserted at ScopeTable #1 at (49,0)
+
+ScopeTable # 1:
+27 --->  <a,ID> 
+28 --->  <b,ID> 
+41 --->  <main,ID> 
+49 --->  <1,CONST_INT> 
+
+Line No:3,Token <SEMICOLON> Lexeme ; found
+
+Line no:4,Token <CHAR> found
+
+Line No:4,Token <ID> Lexeme ch found
+<ch,ID> inserted at ScopeTable #1 at (23,0)
+
+ScopeTable # 1:
+23 --->  <ch,ID> 
+27 --->  <a,ID> 
+28 --->  <b,ID> 
+41 --->  <main,ID> 
+49 --->  <1,CONST_INT> 
+
+Line No:4,Token <ASSIGNOP> Lexeme = found
+
+Line No:4,Token <CONST_CHAR> Lexeme 'a' found
+
+ScopeTable # 1:
+23 --->  <ch,ID> 
+27 --->  <a,ID> 
+28 --->  <b,ID> 
+41 --->  <main,ID> 
+49 --->  <1,CONST_INT> 
+
+Line No:4,Token <SEMICOLON> Lexeme ; found
+
+Line No:5,Token <ID> Lexeme ch found
+
+ScopeTable # 1:
+23 --->  <ch,ID> 
+27 --->  <a,ID> 
+28 --->  <b,ID> 
+41 --->  <main,ID> 
+49 --->  <1,CONST_INT> 
+
+Line No:5,Token <ASSIGNOP> Lexeme = found
+
+Line No:5,Token <CONST_CHAR> Lexeme '\t' found
+<	,CONST_CHAR> inserted at ScopeTable #1 at (9,0)
+
+ScopeTable # 1:
+9 --->  <	,CONST_CHAR> 
+23 --->  <ch,ID> 
+27 --->  <a,ID> 
+28 --->  <b,ID> 
+41 --->  <main,ID> 
+49 --->  <1,CONST_INT> 
+
+Line No:5,Token <SEMICOLON> Lexeme ; found
+
+Line no:6,Token <CHAR> found
+
+Line No:6,Token <ID> Lexeme c found
+<c,ID> inserted at ScopeTable #1 at (29,0)
+
+ScopeTable # 1:
+9 --->  <	,CONST_CHAR> 
+23 --->  <ch,ID> 
+27 --->  <a,ID> 
+28 --->  <b,ID> 
+29 --->  <c,ID> 
+41 --->  <main,ID> 
+49 --->  <1,CONST_INT> 
+
+Line No:6,Token <LTHIRD> Lexeme [ found
+
+Line No:6,Token <RTHIRD> Lexeme ] found
+
+Line No:6,Token <ASSIGNOP> Lexeme = found
+
+Line No:6,Token <STRING> Lexeme "ab\td" found
+
+Line No:6,Token <SEMICOLON> Lexeme ; found
+
+Line No:7,Token <ID> Lexeme printf found
+<printf,ID> inserted at ScopeTable #1 at (69,0)
+
+ScopeTable # 1:
+9 --->  <	,CONST_CHAR> 
+23 --->  <ch,ID> 
+27 --->  <a,ID> 
+28 --->  <b,ID> 
+29 --->  <c,ID> 
+41 --->  <main,ID> 
+49 --->  <1,CONST_INT> 
+69 --->  <printf,ID> 
+
+Line No:7,Token <LPAREN> Lexeme ( found
+
+Line No:7,Token <STRING> Lexeme "abc\
+def\
+ghi" found
+
+Line No:9,Token <RPAREN> Lexeme ) found
+
+Line No:9,Token <SEMICOLON> Lexeme ; found
+
+Line No:10,Token <COMMENT> Lexeme // a comment
  found
 
-Line No:4,Token <COMMENT> Lexeme //Hello nag\
-bangladesh
- found
+Line No:11,Token <COMMENT> Lexeme * another
+*** comment ** found
 
-Line No:4,Token <COMMENT> Lexeme //hello
- found
+Line no:13,Token <RETURN> found
 
-Line No:4,Token <ID> Lexeme bang found
+Line No:13,Token <CONST_INT> Lexeme 0 found
+<0,CONST_INT> inserted at ScopeTable #1 at (48,0)
 
-Line No:5,Token <ID> Lexeme jek found
+ScopeTable # 1:
+9 --->  <	,CONST_CHAR> 
+23 --->  <ch,ID> 
+27 --->  <a,ID> 
+28 --->  <b,ID> 
+29 --->  <c,ID> 
+41 --->  <main,ID> 
+48 --->  <0,CONST_INT> 
+49 --->  <1,CONST_INT> 
+69 --->  <printf,ID> 
+
+Line No:13,Token <SEMICOLON> Lexeme ; found
+
+Line No:14,Token <RCURL> Lexeme } found
+Total lines: 15
+Total errors: 0

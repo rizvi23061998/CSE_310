@@ -5,6 +5,7 @@
 #include <vector>
 #include <fstream>
 
+extern FILE * logout;
 using namespace std;
 
 class SymbolInfo{
@@ -92,7 +93,8 @@ public:
             }
             prev->next = newItem;
         }
-        cout << "<" << name << "," << type << "> inserted at ScopeTable#"<<id << " at ("<<pos << ","<<chainPos << ")\n";
+		fprintf(logout,"<%s,%s> inserted at ScopeTable #%d at (%d,%d)\n",name.c_str(),type.c_str(),id,pos,chainPos);
+		//cout << "<" << name << "," << type << "> inserted at ScopeTable#"<<id << " at ("<<pos << ","<<chainPos << ")\n";
         return true;
 
     }
@@ -146,17 +148,19 @@ public:
 
     void print(){
         SymbolInfo *cur;
-        cout << "ScopeTable#"<<id << ":"<< endl;
+        //cout << "ScopeTable#"<<id << ":"<< endl;
+        fprintf(logout,"\nScopeTable # %d:\n",id);
         for(int i=0;i<n;i++){
 
             cur = scopeTable[i];
             if(cur!=NULL){
-                printf("%d --->  ",i);
+                fprintf(logout,"%d --->  ",i);
                 while(cur!=NULL){
-                        cout << "<" << cur->getName() << "," << cur->getType() << "> ";
+                        //cout << "<" << cur->getName() << "," << cur->getType() << "> ";
+                        fprintf(logout,"<%s,%s> ",cur->getName().c_str(),cur->getType().c_str());
                         cur = cur->next;
                     }
-                    cout << endl;
+                    fprintf(logout,"\n");
                 }
         }
 
