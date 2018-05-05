@@ -113,7 +113,7 @@ LETTER [A-Za-z]
 DIGIT [0-9]
 KEYWORD "if"|"for"|"while"|"do"|"int"|"float"|"void"|"switch"|"default"|"break"|"char"|"double"|"continue"|"return"|"case"|"else"
 CHAR_LITERAL "'.'"|"'\\\\'"|"'\\a'"|"'\\f'"|"'\\r'"|"'\\b'"|"'\\v'"|"'\\0'"|"'\\''"|"'\\n'"|"'\\t'" 
-CHAR_LIT [\']([^'\\]|(\\[aftrbvn0\'\\]))[\']
+CHAR_LIT [\']([^'\\\n\t]|(\\[aftrbvn0\'\\]))[\']
 BITOP "&"|"|"|">>"|"<<"|"^"
 ID [A-Za-z_][A-Za-z_0-9]*
 STRING [\"]([^"\n]|\\.|(\\\n))*[\"]
@@ -137,15 +137,15 @@ EXP_ERR ({DIGIT}*\.?{DIGIT}+?|{DIGIT}+\.?)(E{DIGIT}*(\.)+{DIGIT}+)
 {DIGIT}+     {
 				fprintf(logout,"\nLine No:%d,Token <CONST_INT> Lexeme %s found\n",linecount,yytext);			
 				fprintf(tokenout,"<CONST_INT, %s> ",yytext);	
-				st.insert(yytext,"CONST_INT");
-				st.printAll();		 
+				if(st.insert(yytext,"CONST_INT"))
+					st.printAll();		 
 			 }
 
 ({DIGIT}*\.?{DIGIT}+?|{DIGIT}+\.?)(E[-+]?{DIGIT}+)? {
 				fprintf(logout,"\nLine No:%d,Token <CONST_FLOAT> Lexeme %s found\n",linecount,yytext);			
 				fprintf(tokenout,"<CONST_FLOAT, %s> ",yytext);	
-				st.insert(yytext,"CONST_FLOAT");
-				st.printAll();
+				if(st.insert(yytext,"CONST_FLOAT"))
+					st.printAll();
 			}
 {CHAR_LIT}  {
 					char str[2];
@@ -153,8 +153,8 @@ EXP_ERR ({DIGIT}*\.?{DIGIT}+?|{DIGIT}+\.?)(E{DIGIT}*(\.)+{DIGIT}+)
 					fprintf(tokenout,"<CONST_CHAR, %c> ",trim(yytext));	
 					str[0] = trim(yytext);					
 					str[1] = '\0';
-					st.insert(str,"CONST_CHAR");
-					st.printAll();			
+					if(st.insert(str,"CONST_CHAR"))
+						st.printAll();			
 
 			   }
 [-+]           {
@@ -236,8 +236,8 @@ EXP_ERR ({DIGIT}*\.?{DIGIT}+?|{DIGIT}+\.?)(E{DIGIT}*(\.)+{DIGIT}+)
 {ID}			{
 					fprintf(logout,"\nLine No:%d,Token <ID> Lexeme %s found\n",linecount,yytext);			
 					fprintf(tokenout,"<ID, %s> ",yytext);
-					st.insert(yytext,"ID");
-					st.printAll();
+					if(st.insert(yytext,"ID"))
+						st.printAll();
 				}
 {STRING}        {
 					int tmp = linecount;

@@ -1,188 +1,42 @@
 
-Line no:1,Token <INT> found
+ Error at Line 1: Too many decimal points 1.2.345
 
-Line No:1,Token <ID> Lexeme main found
-<main,ID> inserted at ScopeTable #1 at (41,0)
+ Error at Line 2: Ill formed number 1E10.7
 
-ScopeTable # 1:
-41 --->  <main,ID> 
+ Error at line 3: Invalid prefix on ID or invalid suffix on Number 12abcd
 
-Line No:1,Token <LPAREN> Lexeme ( found
+ Error at line 4: Multi character constant error 'ab'
 
-Line No:1,Token <RPAREN> Lexeme ) found
+ Error at line 5: Unterminated character 'a
 
-Line No:1,Token <LCURL> Lexeme { found
 
-Line no:2,Token <INT> found
+ Error at line 6: Unterminated character '
 
-Line No:2,Token <ID> Lexeme a found
-<a,ID> inserted at ScopeTable #1 at (27,0)
 
-ScopeTable # 1:
-27 --->  <a,ID> 
-41 --->  <main,ID> 
+ Error at line 7: Multi character constant error 'ab cd'
 
-Line No:2,Token <COMMA> Lexeme , found
+ Error at line 8: Unterminated character '\'
 
-Line No:2,Token <ID> Lexeme b found
-<b,ID> inserted at ScopeTable #1 at (28,0)
+ Error at line 9: Empty character constant error ''
 
-ScopeTable # 1:
-27 --->  <a,ID> 
-28 --->  <b,ID> 
-41 --->  <main,ID> 
+ Error at line 10: Unterminated string "abcd
 
-Line No:2,Token <SEMICOLON> Lexeme ; found
 
-Line No:3,Token <ID> Lexeme a found
+ Error at line 11: Unterminated string "abcd\
+efgh
+
+
+Line No:13,Token <ID> Lexeme ijk found
+<ijk,ID> inserted at ScopeTable #1 at (68,0)
 
 ScopeTable # 1:
-27 --->  <a,ID> 
-28 --->  <b,ID> 
-41 --->  <main,ID> 
+68 --->  <ijk,ID> 
 
-Line No:3,Token <ASSIGNOP> Lexeme = found
+ Error at line 13: Unterminated string "
 
-Line No:3,Token <ID> Lexeme a found
 
-ScopeTable # 1:
-27 --->  <a,ID> 
-28 --->  <b,ID> 
-41 --->  <main,ID> 
+ Error at Line 14: Unterminated comment *abc
+def
 
-Line No:3,Token <ADDOP> Lexeme + found
-
-Line No:3,Token <CONST_INT> Lexeme 1 found
-<1,CONST_INT> inserted at ScopeTable #1 at (49,0)
-
-ScopeTable # 1:
-27 --->  <a,ID> 
-28 --->  <b,ID> 
-41 --->  <main,ID> 
-49 --->  <1,CONST_INT> 
-
-Line No:3,Token <SEMICOLON> Lexeme ; found
-
-Line no:4,Token <CHAR> found
-
-Line No:4,Token <ID> Lexeme ch found
-<ch,ID> inserted at ScopeTable #1 at (23,0)
-
-ScopeTable # 1:
-23 --->  <ch,ID> 
-27 --->  <a,ID> 
-28 --->  <b,ID> 
-41 --->  <main,ID> 
-49 --->  <1,CONST_INT> 
-
-Line No:4,Token <ASSIGNOP> Lexeme = found
-
-Line No:4,Token <CONST_CHAR> Lexeme 'a' found
-
-ScopeTable # 1:
-23 --->  <ch,ID> 
-27 --->  <a,ID> 
-28 --->  <b,ID> 
-41 --->  <main,ID> 
-49 --->  <1,CONST_INT> 
-
-Line No:4,Token <SEMICOLON> Lexeme ; found
-
-Line No:5,Token <ID> Lexeme ch found
-
-ScopeTable # 1:
-23 --->  <ch,ID> 
-27 --->  <a,ID> 
-28 --->  <b,ID> 
-41 --->  <main,ID> 
-49 --->  <1,CONST_INT> 
-
-Line No:5,Token <ASSIGNOP> Lexeme = found
-
-Line No:5,Token <CONST_CHAR> Lexeme '\t' found
-<	,CONST_CHAR> inserted at ScopeTable #1 at (9,0)
-
-ScopeTable # 1:
-9 --->  <	,CONST_CHAR> 
-23 --->  <ch,ID> 
-27 --->  <a,ID> 
-28 --->  <b,ID> 
-41 --->  <main,ID> 
-49 --->  <1,CONST_INT> 
-
-Line No:5,Token <SEMICOLON> Lexeme ; found
-
-Line no:6,Token <CHAR> found
-
-Line No:6,Token <ID> Lexeme c found
-<c,ID> inserted at ScopeTable #1 at (29,0)
-
-ScopeTable # 1:
-9 --->  <	,CONST_CHAR> 
-23 --->  <ch,ID> 
-27 --->  <a,ID> 
-28 --->  <b,ID> 
-29 --->  <c,ID> 
-41 --->  <main,ID> 
-49 --->  <1,CONST_INT> 
-
-Line No:6,Token <LTHIRD> Lexeme [ found
-
-Line No:6,Token <RTHIRD> Lexeme ] found
-
-Line No:6,Token <ASSIGNOP> Lexeme = found
-
-Line No:6,Token <STRING> Lexeme "ab\td" found
-
-Line No:6,Token <SEMICOLON> Lexeme ; found
-
-Line No:7,Token <ID> Lexeme printf found
-<printf,ID> inserted at ScopeTable #1 at (69,0)
-
-ScopeTable # 1:
-9 --->  <	,CONST_CHAR> 
-23 --->  <ch,ID> 
-27 --->  <a,ID> 
-28 --->  <b,ID> 
-29 --->  <c,ID> 
-41 --->  <main,ID> 
-49 --->  <1,CONST_INT> 
-69 --->  <printf,ID> 
-
-Line No:7,Token <LPAREN> Lexeme ( found
-
-Line No:7,Token <STRING> Lexeme "abc\
-def\
-ghi" found
-
-Line No:9,Token <RPAREN> Lexeme ) found
-
-Line No:9,Token <SEMICOLON> Lexeme ; found
-
-Line No:10,Token <COMMENT> Lexeme // a comment
- found
-
-Line No:11,Token <COMMENT> Lexeme * another
-*** comment ** found
-
-Line no:13,Token <RETURN> found
-
-Line No:13,Token <CONST_INT> Lexeme 0 found
-<0,CONST_INT> inserted at ScopeTable #1 at (48,0)
-
-ScopeTable # 1:
-9 --->  <	,CONST_CHAR> 
-23 --->  <ch,ID> 
-27 --->  <a,ID> 
-28 --->  <b,ID> 
-29 --->  <c,ID> 
-41 --->  <main,ID> 
-48 --->  <0,CONST_INT> 
-49 --->  <1,CONST_INT> 
-69 --->  <printf,ID> 
-
-Line No:13,Token <SEMICOLON> Lexeme ; found
-
-Line No:14,Token <RCURL> Lexeme } found
 Total lines: 15
-Total errors: 0
+Total errors: 13
